@@ -10,8 +10,8 @@ License: BSD
 URL:     https://github.com/messagebird/sachet
 
 Source0: https://github.com/messagebird/sachet/releases/download/%{version}/%{name}-%{version}.linux-amd64.tar.gz
-Source1: autogen_%{name}.unit
-Source2: autogen_%{name}.default
+Source1: %{name}.unit
+Source2: %{name}.default
 Source3: https://raw.githubusercontent.com/messagebird/%{name}/%{version}/examples/config.yaml
 
 %{?systemd_requires}
