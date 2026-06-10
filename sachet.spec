@@ -54,6 +54,7 @@ exit 0
 %{_bindir}/%{name}
 %config(noreplace) %{_sysconfdir}/default/%{name}
 %dir %attr(755, %{user}, %{group}) %{_sharedstatedir}/prometheus
+%{_unitdir}/%{name}.service
 %config(noreplace) %attr(640, -, %{group})%{_sysconfdir}/prometheus/%{name}.yml
 
 %changelog
