@@ -1,0 +1,18 @@
+# -*- mode: conf -*-
+
+[Unit]
+Description=SMS alerts for Prometheus Alertmanager.
+Documentation=https://github.com/messagebird/sachet
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/default/sachet
+User=prometheus
+ExecStart=/usr/bin/sachet $SACHET_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=5s
+
+
+[Install]
+WantedBy=multi-user.target

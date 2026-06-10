@@ -2,25 +2,27 @@
 %global user prometheus
 %global group prometheus
 
-Name: artifactory_exporter
-Version: 1.16.1
+Name:    sachet
+Version: 0.3.1
 Release: 1%{?dist}
-Summary: Prometheus exporter for JFrog Artifactory stats.
-License: ASL 2.0
-URL:     https://github.com/peimanja/artifactory_exporter
+Summary: SMS alerts for Prometheus Alertmanager.
+License: BSD
+URL:     https://github.com/messagebird/sachet
 
-Source0: https://github.com/peimanja/artifactory_exporter/releases/download/v%{version}/%{name}-v%{version}-linux-amd64.tar.gz
-Source1: %{name}.unit
-Source2: %{name}.default
+Source0: https://github.com/messagebird/sachet/releases/download/%{version}/%{name}-%{version}.linux-amd64.tar.gz
+Source1: autogen_%{name}.unit
+Source2: autogen_%{name}.default
+Source3: https://raw.githubusercontent.com/messagebird/%{name}/%{version}/examples/config.yaml
 
 %{?systemd_requires}
 Requires(pre): shadow-utils
 
 %description
-Collects metrics about an Artifactory system
+Sachet is Hindi for conscious. Sachet is an SMS alerting tool for the
+Prometheus Alertmanager.
 
 %prep
-%setup -q -D -c %{name}-v%{version}-linux-amd64
+%setup -q -n %{name}-%{version}.linux-amd64
 
 %build
 /bin/true
@@ -30,6 +32,7 @@ mkdir -vp %{buildroot}%{_sharedstatedir}/prometheus
 install -D -m 755 %{name} %{buildroot}%{_bindir}/%{name}
 install -D -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/default/%{name}
 install -D -m 644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
+install -D -m 640 %{SOURCE3} %{buildroot}%{_sysconfdir}/prometheus/%{name}.yml
 
 %pre
 getent group prometheus >/dev/null || groupadd -r prometheus
@@ -51,8 +54,8 @@ exit 0
 %{_bindir}/%{name}
 %config(noreplace) %{_sysconfdir}/default/%{name}
 %dir %attr(755, %{user}, %{group}) %{_sharedstatedir}/prometheus
-%{_unitdir}/%{name}.service
+%config(noreplace) %attr(640, -, %{group})%{_sysconfdir}/prometheus/%{name}.yml
 
 %changelog
-* Thu Apr 02 2026 Ivan Garcia <igarcia@cloudox.org> - 1.16.1
-- Initial packaging for the 1.16.1 branch
+* Wed Jun 10 2026 Ivan Garcia <igarcia@cloudox.org> - 0.3.1
+- Initial packaging for the 0.3.1 branch
